@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopSphere - E-Commerce Platform</title>
+    <!-- Official Modern Klaviyo JavaScript SDK Initialization -->
+    <script async type="text/javascript" src="https://static.klaviyo.com/onsite/js/TahUBf/klaviyo.js"></script>
+    <script>
+        window.klaviyo = window.klaviyo || [];
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="if(typeof initApp === 'function') initApp();">
+
+    <header>
+        <div class="logo">
+            ShopSphere
+            <span id="headerTierBadge" class="tier-badge tier-normal">Normal User</span>
+        </div>
+
+        <nav>
+            <button class="nav-btn active" onclick="switchModule('home', this)">Home</button>
+            <button class="nav-btn" onclick="switchModule('shop', this)">Shop</button>
+            <button class="nav-btn" onclick="switchModule('cart', this)">Cart (<span id="cartCount">0</span>)</button>
+            <button class="nav-btn" onclick="switchModule('orders', this)">Your Orders</button>
+            <button class="nav-btn" id="loginNavBtn" onclick="switchModule('login', this)">Log-in / Signup</button>
+        </nav>
+
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <div id="headerUpgradeBtnBox">
+                <button class="btn btn-premium" onclick="openSubscriptionModal()">Upgrade to Premium ($9.99/mo)</button>
+            </div>
+
+            <!-- User Profile & Logout Header Component with Preference Management UI -->
+            <div id="userProfileArea" style="display: none; align-items: center; gap: 0.75rem; background: #1e293b; padding: 0.4rem 0.8rem; border-radius: 20px; border: 1px solid #334155;">
+                <span id="userAvatar" style="background: #0284c7; color: white; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.85rem;">U</span>
+                <span id="userNameDisplay" style="font-size: 0.85rem; font-weight: 600; color: #f8fafc;">User</span>
+                
+                <!-- Marketing Preferences Toggle UI -->
+                <div style="display: flex; align-items: center; gap: 0.3rem; border-left: 1px solid #475569; padding-left: 0.5rem; margin-left: 0.2rem;">
+                    <input type="checkbox" id="userOptInToggle" onchange="toggleMarketingPreferences(this.checked)" style="width: auto; cursor: pointer;">
+                    <label for="userOptInToggle" style="font-size: 0.75rem; color: #cbd5e1; cursor: pointer; margin: 0;">Email Marketing</label>
+                </div>
+
+                <button class="btn btn-secondary" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;" onclick="handleLogout()">Log Out</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="module active">
+            <div class="hero">
+                <h1>Welcome to ShopSphere</h1>
+                <p>Experience personalized shopping with dynamic perks, standard or express delivery, and tier-based discounts!</p>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <h2 style="margin-bottom: 1rem; color: #0f172a;">Membership Status</h2>
+                <div class="tier-cards">
+                    <div class="card">
+                        <h3>Normal Account</h3>
+                        <p style="color: #64748b; margin: 0.5rem 0;">Standard shopping experience</p>
+                        <ul class="perks-list">
+                            <li>📦 Standard Shipping ($4.99)</li>
+                            <li>🚚 5-7 Days Standard Delivery</li>
+                            <li>🏷️ Regular Retail Pricing</li>
+                        </ul>
+                        <p style="color: #64748b; font-size: 0.85rem; margin-top: 1.5rem; text-align: center; font-weight: 600;">
+                            Default Free Tier
+                        </p>
+                    </div>
+
+                    <div class="card premium">
+                        <h3>VIP Prime Membership</h3>
+                        <p style="color: #16a34a; font-size: 1.1rem; font-weight: bold; margin: 0.5rem 0;">$9.99 / month</p>
+                        <ul class="perks-list">
+                            <li>⚡ FREE 1-Day Express Delivery</li>
+                            <li>🏷️ Extra 15% OFF Every Product</li>
+                            <li>⭐ VIP Priority Customer Support</li>
+                        </ul>
+                        <button id="homeUpgradeBtn" class="btn btn-premium" style="width: 100%; margin-top: 1.5rem;" onclick="openSubscriptionModal()">Upgrade to Premium</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="shop" class="module">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h2>Shop Products <span id="productCountBadge" style="font-size: 1rem; color: #64748b; font-weight: normal;">(0 Products)</span></h2>
+                    <p style="font-size: 0.9rem; color: #64748b;">Active Tier: <strong id="shopActiveTierText">Normal User</strong></p>
+                </div>
+            </div>
+
+            <div id="productContainer" class="product-grid"></div>
+        </section>
+
+        <section id="cart" class="module">
+            <h2>Your Shopping Cart</h2>
+            <div id="emptyCartMsg" style="text-align: center; padding: 3rem; background: white; border-radius: 8px; margin-top: 1rem; border: 1px solid #e2e8f0;">
+                <p style="color: #64748b; font-size: 1.1rem; margin-bottom: 1rem;">Your cart is currently empty.</p>
+                <button class="btn btn-primary" onclick="switchModule('shop', document.querySelectorAll('.nav-btn')[1])">Browse Products</button>
+            </div>
+
+            <table class="data-table" id="cartTable" style="display: none; margin-top: 1rem;">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Shipping</th>
+                        <th>In Cart For</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="cartTableBody"></tbody>
+            </table>
+        </section>
+
+        <section id="orders" class="module">
+            <h2>Your Order History</h2>
+            <div id="emptyOrdersMsg" style="text-align: center; padding: 3rem; background: white; border-radius: 8px; margin-top: 1rem; border: 1px solid #e2e8f0;">
+                <p style="color: #64748b; font-size: 1.1rem;">You haven't placed any orders yet.</p>
+            </div>
+
+            <table class="data-table" id="ordersTable" style="display: none; margin-top: 1rem;">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price Paid</th>
+                        <th>Shipping Speed</th>
+                        <th>Tier Used</th>
+                        <th>Attribution (UTM)</th>
+                        <th>Date & Time</th>
+                        <th>Review Status</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersTableBody"></tbody>
+            </table>
+        </section>
+
+        <section id="login" class="module">
+            <div class="auth-container">
+                <div id="loginBox">
+                    <h2 style="margin-bottom: 1.5rem; text-align: center;">Log In to ShopSphere</h2>
+                    <form onsubmit="handleAuth(event, 'Login')">
+                        <div class="form-group">
+                            <label for="loginEmail">Email Address</label>
+                            <input type="email" id="loginEmail" placeholder="your@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Log In</button>
+                    </form>
+                    <p style="color: #0284c7; text-align: center; margin-top: 1rem; font-size: 0.85rem; cursor: pointer;" onclick="toggleAuthForms()">Need an account? Sign up here.</p>
+                </div>
+
+                <div id="signupBox" style="display: none;">
+                    <h2 style="margin-bottom: 1.5rem; text-align: center;">Create Account</h2>
+                    <form onsubmit="handleAuth(event, 'Signup')">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="signupFirstName">First Name</label>
+                                <input type="text" id="signupFirstName" placeholder="John" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="signupLastName">Last Name</label>
+                                <input type="text" id="signupLastName" placeholder="Doe" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupEmail">Email Address</label>
+                            <input type="email" id="signupEmail" placeholder="your@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupPassword">Password</label>
+                            <input type="password" id="signupPassword" placeholder="••••••••" required>
+                        </div>
+                        <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
+                            <!-- Removed default 'checked' attribute for explicit GDPR compliance -->
+                            <input type="checkbox" id="signupOptIn" style="width: auto;">
+                            <label for="signupOptIn" style="font-size: 0.8rem; font-weight: normal; margin: 0; color: #475569;">Subscribe to promotional emails & updates</label>
+                        </div>
+                        <button type="submit" class="btn btn-success" style="width: 100%; margin-top: 1rem;">Create Account</button>
+                    </form>
+                    <p style="color: #0284c7; text-align: center; margin-top: 1rem; font-size: 0.85rem; cursor: pointer;" onclick="toggleAuthForms()">Already registered? Log in.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Dynamic Event Payload Console Modal -->
+    <div class="modal" id="eventLoggerModal" style="display: none;">
+        <div class="modal-content" style="max-width: 600px; text-align: left;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="margin: 0; color: #0284c7;">⚡ Webhook & Event Dispatcher Log</h3>
+                <button class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;" onclick="document.getElementById('eventLoggerModal').style.display='none'">Close</button>
+            </div>
+            <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 0.5rem;">Dispatched payloads (Klaviyo / Webhook Engine):</p>
+            <pre id="eventLoggerConsole" style="background: #0f172a; color: #38bdf8; padding: 1rem; border-radius: 6px; font-size: 0.75rem; max-height: 250px; overflow-y: auto; font-family: monospace;"></pre>
+        </div>
+    </div>
+
+    <!-- Instant Checkout Modal (Updated with Promo Code & Attribution UI) -->
+    <div class="modal" id="paymentModal" style="display: none;">
+        <div class="modal-content">
+            <h2>Instant Checkout</h2>
+            <p style="margin: 1rem 0; font-weight: bold;" id="paymentItemDetails"></p>
+            <p style="font-size: 0.85rem; margin-bottom: 0.5rem;" id="paymentDeliverySpeed"></p>
+            
+            <!-- Dynamic Promo Code Input UI -->
+            <div style="margin: 1rem 0; text-align: left;">
+                <label for="promoCodeInput" style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.3rem; color: #334155;">Have a Promo Code?</label>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="text" id="promoCodeInput" placeholder="e.g. WELCOME10" style="flex: 1; padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem; text-transform: uppercase;">
+                    <button type="button" class="btn btn-secondary" style="padding: 0.4rem 0.75rem; font-size: 0.8rem;" onclick="applyPromoCode()">Apply</button>
+                </div>
+                <p id="promoMessage" style="font-size: 0.75rem; margin-top: 0.3rem; display: none;"></p>
+            </div>
+
+            <!-- Campaign Attribution Badge -->
+            <div id="utmAttributionBadge" style="display: none; text-align: left; background: #f0f9ff; border: 1px dashed #0284c7; padding: 0.5rem; border-radius: 4px; margin-bottom: 1rem;">
+                <p style="font-size: 0.75rem; color: #0369a1; margin: 0;"><strong>🎯 Campaign Attribution:</strong> <span id="utmBadgeDetails">Direct</span></p>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closePaymentModal()">Cancel</button>
+                <button class="btn btn-success" onclick="processInstantPayment()">Pay Now</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="subscriptionModal" style="display: none;">
+        <div class="modal-content">
+            <span class="tier-badge tier-prime" style="display: inline-block; margin-bottom: 0.5rem;">PREMIUM MEMBERSHIP</span>
+            <h2>Upgrade to ShopSphere Prime</h2>
+            <p style="margin: 1rem 0; font-weight: bold; font-size: 1.25rem; color: #16a34a;">$9.99 / month</p>
+            <ul style="text-align: left; margin: 1rem 0; font-size: 0.9rem; line-height: 1.6; padding-left: 1.2rem; color: #334155;">
+                <li>⚡ Free 1-Day Express Shipping on all items</li>
+                <li>🏷️ 15% discount auto-applied to catalog</li>
+                <li> Valid for 30 days from subscription date</li>
+            </ul>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeSubscriptionModal()">Cancel</button>
+                <button class="btn btn-premium" onclick="confirmPremiumUpgrade()">Subscribe Now ($9.99)</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

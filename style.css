@@ -1,0 +1,466 @@
+/* Base Layout & Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f8fafc;
+    color: #1e293b;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header & Navigation */
+header {
+    background-color: #0f172a;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+nav {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.nav-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+    color: white;
+    background-color: #1e293b;
+}
+
+.nav-btn.active {
+    color: white;
+    background-color: #0284c7;
+    font-weight: 600;
+}
+
+/* Main Content Modules */
+main {
+    flex: 1;
+    max-width: 1200px;
+    width: 100%;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+.module {
+    display: none;
+}
+
+.module.active {
+    display: block;
+}
+
+/* Hero & Tier Showcase */
+.hero {
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    color: white;
+    padding: 3rem 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.hero p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.tier-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.card.premium {
+    border: 2px solid #16a34a;
+    background: #f0fdf4;
+}
+
+.perks-list {
+    list-style: none;
+    margin: 1rem 0;
+    line-height: 1.8;
+    color: #475569;
+}
+
+/* Product Grid & Stock Badges */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+}
+
+.product-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.stock-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+.stock-in {
+    background-color: #dcfce7;
+    color: #15803d;
+}
+
+.stock-low {
+    background-color: #fef3c7;
+    color: #b45309;
+}
+
+.stock-out {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+/* Buttons & Badges */
+.btn {
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-primary {
+    background: #0284c7;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #0369a1;
+}
+
+.btn-success {
+    background: #16a34a;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #15803d;
+}
+
+.btn-secondary {
+    background: #e2e8f0;
+    color: #334155;
+}
+
+.btn-secondary:hover {
+    background: #cbd5e1;
+}
+
+.btn-premium {
+    background: #eab308;
+    color: #1e293b;
+    font-weight: 700;
+}
+
+.btn-premium:hover {
+    background: #ca8a04;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.tier-badge {
+    padding: 0.25rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.tier-normal {
+    background: #e2e8f0;
+    color: #475569;
+}
+
+.tier-prime {
+    background: #fef08a;
+    color: #854d0e;
+}
+
+/* Feature 7: VIP Expiration Warning Tier Badge */
+.tier-expiring {
+    background: #fed7aa;
+    color: #9a3412;
+    border: 1px solid #f97316;
+    animation: pulseWarning 2s infinite;
+}
+
+@keyframes pulseWarning {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* Tables */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.data-table th, .data-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.data-table th {
+    background: #f1f5f9;
+    color: #475569;
+    font-weight: 600;
+}
+
+/* Auth Section */
+.auth-container {
+    max-width: 420px;
+    margin: 2rem auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 0.4rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+/* Modal Windows & Dynamic Messaging */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 480px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+}
+
+/* Feature 3: Promo / Discount Engine Styling */
+.promo-success {
+    color: #16a34a;
+    font-weight: 600;
+}
+
+.promo-error {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+/* Feature 1: Abandoned Cart Warning Badge */
+.cart-abandoned-badge {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #f87171;
+    padding: 0.5rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Feature 4: UTM Attribution Tag Badges */
+.utm-tag {
+    display: inline-block;
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid #bae6fd;
+}
+
+/* Feature 5: Custom User Metadata Profile Stats */
+.user-meta-panel {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    text-align: center;
+}
+
+.user-meta-item .meta-label {
+    font-size: 0.75rem;
+    color: #64748b;
+    text-transform: uppercase;
+}
+
+.user-meta-item .meta-value {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #0f172a;
+}
+
+/* Feature 6: Post-Purchase Review Badges */
+.review-status {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+.review-pending {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.review-sent {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+/* Feature 2: Dynamic Webhook & Event Dispatcher Console Panel */
+.webhook-console-panel {
+    background: #0f172a;
+    color: #38bdf8;
+    padding: 1rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    max-height: 250px;
+    overflow-y: auto;
+    font-family: monospace;
+    border: 1px solid #334155;
+}
+
+/* Responsive Scaling */
+@media (max-width: 640px) {
+    header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    nav {
+        justify-content: space-around;
+        width: 100%;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .user-meta-panel {
+        grid-template-columns: 1fr;
+    }
+}
