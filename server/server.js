@@ -17,6 +17,11 @@ app.use(express.json());
 // Serve frontend static files
 app.use(express.static(__dirname));
 
+// Serve index.html explicitly for the root URL
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 // -------------------------------------------------------------
 // 1. Database Connection
 // -------------------------------------------------------------
